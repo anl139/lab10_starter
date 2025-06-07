@@ -9,7 +9,14 @@ body {
   display: grid;
   justify-items: center;
 }
-
+body.black {
+  background-color: black;
+}
+body.black>main {
+  background-color: white;
+  border-radius: 5px;
+  padding: 30px
+}
 body.blue {
   background-color: lightblue;
 }

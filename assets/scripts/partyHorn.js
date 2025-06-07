@@ -6,6 +6,13 @@ window.addEventListener('DOMContentLoaded', init);
 
 function init() {
   bindListeners();
+
+  const themeBtn = document.getElementById('toggle-theme');
+  themeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('black');
+  });
+  const hornSelect = document.getElementById('horn-select');
+  enablePartialMatchSelect(hornSelect);
 }
 
 function bindListeners() {
@@ -18,11 +25,12 @@ function bindListeners() {
 }
 
 function selectHorn() {
+  const value = document.getElementById('horn-select').value;
   const imgElem = document.querySelector('#expose > img');
   const audioElem = document.querySelector('#expose > audio');
-  imgElem.setAttribute('src', `assets/images/${this.value}.svg`);
-  audioElem.setAttribute('src', `assets/audio/${this.value}.mp3`)
-  partyHorn = this.value == 'party-horn' ? true : false;
+  imgElem.setAttribute('src', `assets/images/${value}.svg`);
+  audioElem.setAttribute('src', `assets/audio/${value}.mp3`);
+  partyHorn = value === 'party-horn';
 }
 
 function updateVolume() {
@@ -50,4 +58,26 @@ function playSound() {
   if (audioElem.getAttribute('src') == '') return;
   if (partyHorn) setTimeout(() => jsConfetti.addConfetti(), 350);
   audioElem.play();
+}
+function enablePartialMatchSelect(selectElem) {
+  let buffer = '';
+  let lastKeyTime = Date.now();
+
+  selectElem.addEventListener('keydown', (e) => {
+    const now = Date.now();
+
+    // Reset buffer if user waits more than 500ms
+    if (now - lastKeyTime > 500) buffer = '';
+
+    buffer += e.key.toLowerCase();
+    lastKeyTime = now;
+
+    for (let i = 0; i < selectElem.options.length; i++) {
+      const option = selectElem.options[i];
+      if (option.text.toLowerCase().startsWith(buffer)) {
+        selectElem.selectedIndex = i;
+        break;
+      }
+    }
+  });
 }

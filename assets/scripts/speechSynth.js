@@ -25,14 +25,23 @@ function populateVoices() {
 function bindListeners() {
   const talkBtn = document.querySelector('#explore > button');
   const textarea = document.querySelector('#explore > textarea');
-
+  const clearBtn = document.querySelector('#clear-btn');
+  const rateInput = document.querySelector('#rate');
+  const rateValue = document.querySelector('#rate-value');
   talkBtn.addEventListener('click', () => {
     let textToSpeak = textarea.value;
     let utterThis = new SpeechSynthesisUtterance(textToSpeak);
     utterThis.voice = voices[getOptionIndex()];
+    utterThis.rate = parseFloat(rateInput.value);
     synth.speak(utterThis);
     openMouth();
   })
+  clearBtn.addEventListener('click', () => {
+    textarea.value = '';
+  });
+  rateInput.addEventListener('input', () => {
+    rateValue.textContent = rateInput.value;
+  });
 }
 
 function getOptionIndex() {
